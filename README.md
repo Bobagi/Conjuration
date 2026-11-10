@@ -7,7 +7,8 @@ art are our own, nothing is copied from Bethesda).
 atronachs of the games that inspired it, and stops to hurl fireballs (the vanilla Imp Fireball, at the
 Imp's rate). If it falls far behind it reappears next to you in a burst of fire.
 
-**The Conjurer**, a town NPC, moves in after the Eye of Cthulhu and sells the tome after Skeletron.
+**The Conjurer**, a town NPC modelled on Skyrim's conjuration master, moves in after the Eye of
+Cthulhu and sells the tome after Skeletron.
 
 Both are drawn with Terraria's own player renderer (a dressed up dummy player, like the Mannequin),
 so they look like the game itself; see `docs/ART.md`.
@@ -65,6 +66,7 @@ Localization/en-US_Mods.Conjuration.hjson   names and tooltips
 Content/NPCs/                         the Conjurer town NPC (shop, chat, sheet and head)
 Content/Visuals/                      looks of the Atronach and the Conjurer (dummy players)
 Content/Commands/                     /atronachtest playtest and sprite export helper (Journey only)
+tools/make_atronach_crown.py          draws the Atronach's head piece (mask, horns, plume, plates)
 tools/check_art.py                    verifies sprite sizes before building
 docs/ART.md                           how the art is made and exported
 docs/BALANCE.md                       numbers and the test checklist

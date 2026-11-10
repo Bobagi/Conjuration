@@ -20,7 +20,7 @@ namespace Conjuration.Content.Commands
 	{
 		public override CommandType Type => CommandType.Chat;
 		public override string Command => "atronachtest";
-		public override string Usage => "/atronachtest [spawn|hairs|icons|npc|conjurer|unlock]";
+		public override string Usage => "/atronachtest [spawn|hairs|hairsm|template|icons|npc|conjurer|unlock]";
 		public override string Description => "Journey mode only: Fire Atronach playtest kit and art exports.";
 
 		public static string ExportDir => Path.Combine(Main.SavePath, "ConjurationExport");
@@ -34,7 +34,10 @@ namespace Conjuration.Content.Commands
 				return;
 			}
 			string sub = args.Length > 0 ? args[0] : "";
-			if (sub == "hairs") { caller.Reply("Wrote " + ExportHairs(), Color.Orange); return; }
+			if (sub == "hairs") { caller.Reply("Wrote " + ExportHairs("hairs.png", () => AtronachLook.Create(withCrown: false)), Color.Orange); return; }
+			if (sub == "hairsm") { caller.Reply("Wrote " + ExportHairs("hairs_conjurer.png", ConjurerLook.Create), Color.Orange); return; }
+			if (sub == "looks") { caller.Reply("Wrote " + ExportLookGrid(), Color.Orange); return; }
+			if (sub == "template") { caller.Reply("Wrote " + ExportAtronachSheets(), Color.Orange); return; }
 			if (sub == "icons") { caller.Reply("Wrote " + ExportBuffIcon(), Color.Orange); return; }
 			if (sub == "npc") { caller.Reply("Wrote " + ExportConjurer(), Color.Orange); return; }
 			if (sub == "unlock")
@@ -181,23 +184,84 @@ namespace Conjuration.Content.Commands
 			return path;
 		}
 
-		private static string ExportHairs()
+		private static string ExportHairs(string name, Func<Player> make)
 		{
-			const int cols = 15, cw = 44, ch = 60;
+			const int cols = 15, cw = 44, ch = 60, rowsPerChunk = 10;
 			int count = HairID.Count;
 			int rows = (count + cols - 1) / cols;
-			return RenderToPng("hairs.png", cols * cw, rows * ch, origin =>
+			var all = new Color[cols * cw * rows * ch];
+			for (int r0 = 0; r0 < rows; r0 += rowsPerChunk)
 			{
-				for (int i = 0; i < count; i++)
+				int nr = Math.Min(rowsPerChunk, rows - r0), start = r0;
+				Color[] part = RenderToData(cols * cw, nr * ch, origin =>
 				{
-					Player d = AtronachLook.Create();
-					d.hair = i;
-					d.direction = 1;
-					d.position = origin + new Vector2((i % cols) * cw + 12, (i / cols) * ch + 10);
-					AtronachLook.Refresh(d);
-					Main.PlayerRenderer.DrawPlayer(Main.Camera, d, d.position, 0f, d.fullRotationOrigin);
-				}
+					for (int i = start * cols; i < Math.Min(count, (start + nr) * cols); i++)
+					{
+						Player d = make();
+						d.hair = i;
+						d.direction = 1;
+						d.position = origin + new Vector2((i % cols) * cw + 12, (i / cols - start) * ch + 10);
+						AtronachLook.Refresh(d);
+						Main.PlayerRenderer.DrawPlayer(Main.Camera, d, d.position, 0f, d.fullRotationOrigin);
+					}
+				});
+				Array.Copy(part, 0, all, start * ch * cols * cw, part.Length);
+			}
+			return SavePng(name, all, cols * cw, rows * ch);
+		}
+
+		// Grid to choose the atronach's gauntlets: columns = hand accessory (+ dye), rows = clothing style.
+		private static string ExportLookGrid()
+		{
+			int[] variants = { 4, 6 };
+			var hands = new (int item, int dye)[]
+			{
+				(0, 0),
+				(ItemID.FireGauntlet, 0),
+				(ItemID.FireGauntlet, ItemID.BlackDye),
+				(ItemID.FeralClaws, 0),
+				(ItemID.FeralClaws, ItemID.BlackDye),
+				(ItemID.MechanicalGlove, ItemID.BlackDye),
+			};
+			const int cw = 44, ch = 60;
+			return RenderToPng("looks.png", hands.Length * cw, variants.Length * ch, origin =>
+			{
+				for (int r = 0; r < variants.Length; r++)
+					for (int c = 0; c < hands.Length; c++)
+					{
+						Player d = AtronachLook.Create(withCrown: false);
+						d.skinVariant = variants[r];
+						if (hands[c].item > 0) d.armor[3].SetDefaults(hands[c].item);
+						if (hands[c].dye > 0) d.dye[3].SetDefaults(hands[c].dye);
+						d.direction = 1;
+						d.position = origin + new Vector2(c * cw + 12, r * ch + 10);
+						AtronachLook.Refresh(d);
+						Main.PlayerRenderer.DrawPlayer(Main.Camera, d, d.position, 0f, d.fullRotationOrigin);
+					}
 			});
+		}
+
+		// Player format sheets (20 frames of 40x56, facing right): body frame i with legs frame i.
+		private static string ExportAtronachSheets()
+		{
+			foreach (bool crown in new[] { false, true })
+			{
+				var sheet = new Color[40 * 56 * 20];
+				RenderToData(40, 56, origin => DrawFrame(AtronachLook.Create(crown), origin, 0, 0));   // warm up
+				for (int i = 0; i < 20; i++)
+				{
+					int f = i;
+					Color[] frame = RenderToData(40, 56, origin =>
+					{
+						Player d = AtronachLook.Create(crown);
+						d.direction = 1;
+						DrawFrame(d, origin, f, f);
+					});
+					Array.Copy(frame, 0, sheet, i * frame.Length, frame.Length);
+				}
+				SavePng(crown ? "atronach_crowned.png" : "atronach_template.png", sheet, 40, 56 * 20);
+			}
+			return Path.Combine(ExportDir, "atronach_template.png");
 		}
 
 		// Head and shoulders for the buff icon, and the whole figure (for icon.png, see tools/icons_from_export.py).

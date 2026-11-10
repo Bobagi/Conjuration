@@ -4,6 +4,11 @@ Items: {
 		DisplayName: Tome: Conjure Fire Atronach
 		Tooltip: Summons a Fire Atronach that walks beside you and hurls fireballs at your enemies
 	}
+
+	AtronachCrown: {
+		DisplayName: Atronach Crown
+		Tooltip: ""
+	}
 }
 
 Buffs: {
@@ -37,11 +42,11 @@ NPCs: {
 			HateCrowded: I cannot concentrate with this crowd. Something will catch fire.
 			LikeBiome: The {BiomeName} is quiet. Good for long hours of study.
 			DislikeBiome: The {BiomeName} is far too damp for fire magic.
-			LoveNPC: {NPCName} understands real magic. We talk for hours.
-			LikeNPC: {NPCName} always has something that goes boom. I respect that.
-			DislikeNPC: {NPCName} keeps throwing water at my experiments.
-			LikeNPC_Princess: {NPCName} is lovely. My atronachs behave around her.
-			Princess_LovesNPC: {NPCName} lets me watch the little fire spirits dance!
+			LoveNPC: "{NPCName} understands real magic. We talk for hours."
+			LikeNPC: "{NPCName} always has something that goes boom. I respect that."
+			DislikeNPC: "{NPCName} keeps throwing water at my experiments."
+			LikeNPC_Princess: "{NPCName} is lovely. My atronachs behave around her."
+			Princess_LovesNPC: "{NPCName} lets me watch the little fire spirits dance!"
 		}
 
 		Census.SpawnCondition: Defeat the Eye of Cthulhu

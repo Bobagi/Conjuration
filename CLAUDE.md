@@ -12,5 +12,6 @@ Summon-class mod, Fire Atronach first. Read `README.md` (roadmap, how to open) a
   sprites: the owner rejected them (2026-11-10). Verify sizes with `python tools/check_art.py`.
 - Playtest: Journey character + `/atronachtest [spawn]`; launch with `-skipselect "player:world"`.
 - tModLoader targets .NET 8; the mod uses 1.4.4 APIs (`ModProjectile`, `ModBuff`, `ModItem`).
-- Do not copy Skyrim assets or text. Original designs only.
+- Look: the owner wants the creatures and NPCs to look like the Skyrim originals. Start from reference
+  images (UESP) and redraw them in Terraria style; never copy Skyrim assets or text.
 - Publishing to the Steam Workshop is done by the owner (Gustavo), not by Claude.
