@@ -1,0 +1,10 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- Standard tModLoader 1.4 mod project (.../ModSources/Conjuration/Conjuration.csproj). -->
+  <Import Project="../tModLoader.targets" />
+  <PropertyGroup>
+    <AssemblyName>Conjuration</AssemblyName>
+    <TargetFramework>net8.0</TargetFramework>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+</Project>

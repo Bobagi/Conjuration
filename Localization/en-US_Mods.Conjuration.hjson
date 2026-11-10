@@ -1,0 +1,21 @@
+Mods: {
+	Conjuration: {
+		Items: {
+			TomeConjureFireAtronach: {
+				DisplayName: Tome: Conjure Fire Atronach
+				Tooltip: Summons a Fire Atronach that hurls fireballs at your enemies
+			}
+		}
+		Buffs: {
+			FireAtronachBuff: {
+				DisplayName: Fire Atronach
+				Description: A Fire Atronach fights for you
+			}
+		}
+		Projectiles: {
+			FireAtronachMinion: {
+				DisplayName: Fire Atronach
+			}
+		}
+	}
+}

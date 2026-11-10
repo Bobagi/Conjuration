@@ -1,0 +1,5 @@
+displayName = Conjuration
+author = Bobagi
+version = 0.1
+# side = Both: the summoned minion is a projectile, so server and clients both need the mod.
+side = Both
