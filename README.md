@@ -3,8 +3,10 @@
 Conjuration spells for summoners, inspired by the Atronach spells of the Elder Scrolls games (names and
 art are our own, nothing is copied from Bethesda).
 
-**v0.1:** *Tome: Conjure Fire Atronach*. A permanent minion (1 slot) that floats beside you and throws
-fireballs at enemies. **The art is placeholder**, see `docs/ART.md`.
+**v0.1:** *Tome: Conjure Fire Atronach*. A permanent minion (1 slot) that **walks on the ground** beside you, like the
+atronachs of the games that inspired it, and stops to hurl fireballs (the vanilla Imp Fireball, at the
+Imp's rate). If it falls far behind it reappears next to you in a burst of fire. Art generated with the
+local ComfyUI and turned into Terraria style sprites, see `docs/ART.md`.
 
 ## Roadmap
 
@@ -25,7 +27,8 @@ git clone https://github.com/Bobagi/Conjuration.git
 ```
 
 Then in game: *Workshop > Develop Mods > Conjuration > Build + Reload*. Make a new single player
-world (or a Journey one for easy testing), craft or spawn the tome, and summon.
+world (or a Journey one for easy testing), craft or spawn the tome, and summon. To jump straight into a
+world: `dotnet tModLoader.dll -skipselect "<player>:<world>"` (the player must fit the world's mode).
 
 Headless build (compile check):
 
@@ -34,13 +37,17 @@ cd "<Steam>/steamapps/common/tModLoader"
 ./dotnet/dotnet tModLoader.dll -build "<ModSources>/Conjuration"
 ```
 
-To get the tome fast: cheat it in with the *Cheat Sheet* / *HERO's Mod* mods, or craft it:
+To get the tome fast: `/atronachtest` (Journey characters), or craft it:
 Book + 12 Hellstone Bar + 3 Fireblossom at a Bookcase.
 
 ## Status
 
-The code was written **without being compiled or run** (written on a machine without the game window).
-Expect to fix small API errors on the first build. Report or fix them in `Content/`.
+Builds with 0 errors and 0 warnings on tModLoader v2026.9.3.1. Playtested in single player on
+2026-11-10: summons on the ground, follows the player walking, stops and throws fireballs at zombies
+(17 damage per hit on a Zombie). Multiplayer not tested yet, see `docs/BALANCE.md`.
+
+Playtest shortcut: a **Journey mode** character in single player can type `/atronachtest` in chat to get
+the tome, or `/atronachtest spawn` to also spawn three zombies.
 
 ## Layout
 
@@ -50,7 +57,10 @@ Content/Items/                        the tome (summon item)
 Content/Buffs/                        the buff that keeps the minion alive
 Content/Projectiles/                  the minion (AI, fireballs, animation)
 Localization/en-US_Mods.Conjuration.hjson   names and tooltips
-tools/make_placeholders.py            generates the placeholder PNGs
+Content/Commands/                     /atronachtest playtest helper (Journey mode only)
+tools/comfy_atronach.py               ComfyUI concepts (creature and tome)
+tools/build_sheet.py                  poses -> sprite sheet, buff, tome, icons
+tools/sprite_from_concept.py          background cut, palette and outline helpers
 tools/check_art.py                    verifies sprite sizes before building
 docs/ART.md                           sprite specs + ComfyUI workflow
 docs/BALANCE.md                       numbers and the test checklist

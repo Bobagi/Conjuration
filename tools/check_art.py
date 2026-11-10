@@ -10,8 +10,9 @@ ROOT = Path(__file__).resolve().parent.parent
 EXPECTED = {
     "Content/Items/TomeConjureFireAtronach.png": (32, 32),
     "Content/Buffs/FireAtronachBuff.png": (32, 32),
-    "Content/Projectiles/FireAtronachMinion.png": (40, 176),   # 4 frames of 40x44, stacked
+    "Content/Projectiles/FireAtronachMinion.png": (52, 448),   # 7 frames of 52x64, stacked
     "icon.png": (80, 80),
+    "icon_small.png": (30, 30),
 }
 
 

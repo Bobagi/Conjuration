@@ -1,1 +1,1 @@
-0.1: Tome of the Fire Atronach and its minion (placeholder art).
+0.1: Tome of the Fire Atronach and its minion. The atronach walks on the ground beside you (walk, wind up and throw animation) and hurls Imp style fireballs.
