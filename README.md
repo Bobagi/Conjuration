@@ -3,21 +3,23 @@
 Conjuration spells for summoners, inspired by the Atronach spells of the Elder Scrolls games (names and
 art are our own, nothing is copied from Bethesda).
 
-**v0.1:** *Tome: Conjure Fire Atronach*. A permanent minion (1 slot) that **walks on the ground** beside you, like the
-atronachs of the games that inspired it, and stops to hurl fireballs (the vanilla Imp Fireball, at the
-Imp's rate). If it falls far behind it reappears next to you in a burst of fire.
+Three conjuration tomes, each a permanent 1 slot minion that stays on the ground beside you like the
+atronachs of Skyrim (it reappears next to you in a burst of its element if it falls far behind):
 
-**The Conjurer**, a town NPC modelled on Skyrim's conjuration master, moves in after the Eye of
-Cthulhu and sells the tome after Skeletron.
+| Tome | Minion | Attack | Sold by the Conjurer |
+|---|---|---|---|
+| Conjure Fire Atronach | walks, human sized | throws fireballs (vanilla Imp Fireball) | after Skeletron (also craftable) |
+| Conjure Frost Atronach | huge and slow, never hovers | walks into melee and punches, Frostbite, heavy knockback | Hardmode |
+| Conjure Storm Atronach | floats just above the ground | Chain Lightning that jumps to a second enemy | after any mechanical boss |
 
-Both are drawn with Terraria's own player renderer (a dressed up dummy player, like the Mannequin),
-so they look like the game itself; see `docs/ART.md`.
+**The Conjurer**, a town NPC modelled on Skyrim's conjuration master Phinis Gestor, moves in after the
+Eye of Cthulhu. Art pipeline (Skyrim references, local ComfyUI, pixelizer): `docs/ART.md`.
 
 ## Roadmap
 
-1. Fire Atronach minion and tome (done, playtested in single player).
-2. The **Conjurer** town NPC that sells the conjuration tomes (done: shop gated by Skeletron).
-3. More conjurations: Frost Atronach, Storm Atronach, Dremora.
+1. Fire Atronach minion and tome (done).
+2. The **Conjurer** town NPC that sells the conjuration tomes (done).
+3. Frost and Storm Atronachs (done; art to be polished). Next: Dremora.
 4. Not planned: the wizard school / portal dimension (needs a custom map and a world-switch system).
 
 ## Open the project

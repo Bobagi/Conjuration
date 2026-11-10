@@ -11,7 +11,6 @@ EXPECTED = {
     # The Atronach is drawn with the game's player renderer; its texture is only a transparent stand in.
     "Content/Projectiles/FireAtronachMinion.png": (20, 42),
     "Content/Buffs/FireAtronachBuff.png": (32, 32),
-    "Content/Items/AtronachCrown_Head.png": (40, 1120),   # player head sheet, tools/make_atronach_crown.py
     # Town NPC sheet: 25 frames of 40x58, exported in game with /atronachtest npc.
     "Content/NPCs/Conjurer.png": (40, 1450),
     "icon.png": (80, 80),

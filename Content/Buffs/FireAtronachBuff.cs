@@ -4,10 +4,12 @@ using Conjuration.Content.Projectiles;
 
 namespace Conjuration.Content.Buffs
 {
-	// The buff is what keeps the minion alive: the minion refreshes its own timeLeft while
-	// the owner has the buff, and the buff removes itself when no minion is left.
-	public class FireAtronachBuff : ModBuff
+	// The buff keeps the minion alive: the minion refreshes its own timeLeft while the owner has the buff,
+	// and the buff removes itself when no minion of its kind is left.
+	public abstract class AtronachBuff : ModBuff
 	{
+		protected abstract int MinionType { get; }
+
 		public override void SetStaticDefaults()
 		{
 			Main.buffNoSave[Type] = true;        // does not survive leaving the world
@@ -16,9 +18,9 @@ namespace Conjuration.Content.Buffs
 
 		public override void Update(Player player, ref int buffIndex)
 		{
-			if (player.ownedProjectileCounts[ModContent.ProjectileType<FireAtronachMinion>()] > 0)
+			if (player.ownedProjectileCounts[MinionType] > 0)
 			{
-				player.buffTime[buffIndex] = 18000;   // keep the buff up while the minion lives
+				player.buffTime[buffIndex] = 18000;
 			}
 			else
 			{
@@ -26,5 +28,20 @@ namespace Conjuration.Content.Buffs
 				buffIndex--;
 			}
 		}
+	}
+
+	public class FireAtronachBuff : AtronachBuff
+	{
+		protected override int MinionType => ModContent.ProjectileType<FireAtronachMinion>();
+	}
+
+	public class FrostAtronachBuff : AtronachBuff
+	{
+		protected override int MinionType => ModContent.ProjectileType<FrostAtronachMinion>();
+	}
+
+	public class StormAtronachBuff : AtronachBuff
+	{
+		protected override int MinionType => ModContent.ProjectileType<StormAtronachMinion>();
 	}
 }

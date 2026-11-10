@@ -5,9 +5,22 @@ Items: {
 		Tooltip: Summons a Fire Atronach that walks beside you and hurls fireballs at your enemies
 	}
 
-	AtronachCrown: {
-		DisplayName: Atronach Crown
-		Tooltip: ""
+	TomeConjureFrostAtronach: {
+		DisplayName: Tome: Conjure Frost Atronach
+		Tooltip:
+			'''
+			Summons a huge Frost Atronach that walks into melee and punches your enemies
+			Its blows inflict Frostbite
+			'''
+	}
+
+	TomeConjureStormAtronach: {
+		DisplayName: Tome: Conjure Storm Atronach
+		Tooltip:
+			'''
+			Summons a Storm Atronach that hovers beside you and casts Chain Lightning
+			The lightning jumps to a second enemy
+			'''
 	}
 }
 
@@ -16,9 +29,25 @@ Buffs: {
 		DisplayName: Fire Atronach
 		Description: A Fire Atronach fights for you
 	}
+
+	FrostAtronachBuff: {
+		DisplayName: Frost Atronach
+		Description: A Frost Atronach fights for you
+	}
+
+	StormAtronachBuff: {
+		DisplayName: Storm Atronach
+		Description: A Storm Atronach fights for you
+	}
 }
 
-Projectiles.FireAtronachMinion.DisplayName: Fire Atronach
+Projectiles: {
+	FireAtronachMinion.DisplayName: Fire Atronach
+	FrostAtronachMinion.DisplayName: Frost Atronach
+	StormAtronachMinion.DisplayName: Storm Atronach
+	AtronachSlam.DisplayName: Frost Atronach
+	StormBolt.DisplayName: Chain Lightning
+}
 
 NPCs: {
 	Conjurer: {
@@ -31,6 +60,7 @@ NPCs: {
 			Line1: Conjuration is simple: a strong will, a clear circle, and a lot of patience.
 			Line2: Mind the curtains. Nothing in my house is fireproof any more.
 			Line3: The Wizard calls it showing off. I call it bringing a friend.
+			Line4: Frost atronachs are slow, but nothing gets past one. Storm atronachs never stop humming.
 		}
 
 		TownNPCMood: {

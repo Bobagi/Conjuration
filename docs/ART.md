@@ -1,66 +1,60 @@
 # Art guide
 
-All characters are drawn with **Terraria's own player renderer**, the trick the vanilla Mannequin uses:
-a dummy `Player` dressed with vanilla items and colours. That gives the real proportions, outline,
-palette, walk cycle and arm poses of the game, and the mod ships no copied art.
+## Atronachs: sprite sheets made from the Skyrim references
 
-| What | How it is drawn | Files |
-|---|---|---|
-| Fire Atronach (minion) | live, every frame, `Content/Visuals/AtronachLook.cs` | `FireAtronachMinion.png` is a transparent 20x42 stand in; `Content/Items/AtronachCrown_Head.png` (40x1120 player head sheet) |
-| Conjurer (town NPC) | sheet exported from `Content/Visuals/ConjurerLook.cs` | `Content/NPCs/Conjurer.png` (40x1450) and `Conjurer_Head.png` |
-| Buff icon, mod icon | exported head / full figure of the Atronach | `Content/Buffs/FireAtronachBuff.png`, `icon.png` (80x80) |
-| Tome | the vanilla Spell Tome texture with a fire tint (`Texture` override) | none |
+The owner wants the atronachs to look like the Skyrim originals, so the sheets start from the real
+reference images (UESP, `Skyrim:Daedra`: Flame, Frost and Storm Atronach). Nothing from Skyrim is shipped:
+the references only feed the generator, the mod gets new Terraria scale pixel art.
 
-## The looks (matched to the Skyrim references on UESP)
+1. **References**: the UESP creature images (`images.uesp.net/.../SR-creature-*_Atronach.jpg`), saved
+   locally through the browser (UESP blocks scripted downloads).
+2. **Poses** with Qwen-Image-Edit 2511 (local ComfyUI, `C:\ComfyUIFiles\scripts\qwen_edit.py`): first a
+   side view idle **from the reference**, then every other pose **from that idle** (same character). Every
+   prompt starts with: "Keep exactly the same creature design, shapes, materials and colors as the input
+   image. Full body visible, side view facing right, plain flat white background, no ground, no scenery,
+   nothing else." About 2.5 minutes per pose on the 3060 Ti.
+   - Flame: idle, walkA, walkB, cast (fireball leaving the hand)
+   - Frost: idle, walkA, walkB, punch
+   - Storm: idle, cast (lightning from a floating rock arm); it hovers, so no walk poses
+3. **Sheets**: `tools/atronach_art.py poses.json` (run with `C:\ComfyUIFiles\tools\.venv\Scripts\python.exe`):
+   - background cut (rembg isnet), same scale for every pose of a creature, feet aligned
+   - PixelOE style pixelization: contrast aware outline expansion (pixels brighter than their
+     neighbourhood dilate, darker ones erode) and a k-centroid downscale per 8x8 patch, so thin features
+     such as flames and horns survive the shrink. (The `pixeloe` package itself could not be installed
+     here; the script implements the same idea with Pillow and numpy.)
+   - saturation boost and glow tint for near white pixels, one palette per creature for all frames,
+     isolated pixel cleanup, 1 art pixel dark outline, 2x2 Terraria pixels
+   - writes `Content/Projectiles/<Name>AtronachMinion.png` and `Content/Buffs/<Name>AtronachBuff.png`;
+     `--preview out.png` writes a contact sheet instead
+4. Rebuild, then `python tools/check_art.py`.
 
-Reference images: `Skyrim:Daedra#Flame_Atronach` and `Skyrim:Phinis_Gestor` on en.uesp.net. The owner
-wants both to look like the Skyrim originals; we redraw them in Terraria pixel art, nothing is copied.
+Sheet layout (facing right, frames stacked): `0 idle | 1 walk A | 2 pass | 3 walk B | 4 pass | 5 attack`
+(read by `Content/Projectiles/AtronachMinion.cs`; the frame height is the texture height / 6).
 
-- **Flame Atronach** ("female humanoids engulfed in flame, wearing intricate, black, metal armor"):
-  female body all in fire colours (skin and clothes), **AtronachCrown** head piece (black mask with a
-  glowing eye, ram horns curling back, plume of fire, spiked pauldrons, chest plate, hip plate; drawn by
-  `tools/make_atronach_crown.py`), **Feral Claws with Black Dye** for the black clawed gauntlets, black
-  shoes for the greaves. Fire dust rises from the plume; it raises then aims the arm when it throws.
-- **Conjurer** = Phinis Gestor, the College of Winterhold conjuration master who sells the tome: bald,
-  pale, no beard, the player "Coat" clothing style in slate blue over a brown red shirt, dark trousers,
-  pale boots. Only player clothes and colours.
+Sizes in art pixels (screen pixels are 2x): Flame 44 tall, Frost 52 (Skyrim's frost atronach is a big
+melee construct), Storm 48 (floating rocks). Tune `CREATURES` in the script.
 
-Change a look by editing those two files; nothing else needs redrawing for the Atronach.
+## Conjurer (town NPC)
 
-## Exporting sheets and icons (the "Player Renderer" helper, built in)
+Drawn with the game's own player renderer (a dressed up dummy `Player`, the Mannequin trick), modelled
+on Phinis Gestor, the College of Winterhold conjuration master who sells the tomes in Skyrim: bald, pale,
+"Coat" clothing style in slate blue over a brown red shirt, pale boots (`Content/Visuals/ConjurerLook.cs`).
+The sheet (25 frames, Rijam's Town NPC layout) and head are exported in game with `/atronachtest npc`
+(Journey character), the community "Player Renderer" helper built into the mod; `/atronachtest hairsm`
+renders every hair style to choose from. Files land in `Documents/My Games/Terraria/tModLoader/
+ConjurationExport/`; copy `Conjurer.png` and `Conjurer_Head.png` into `Content/NPCs/`.
 
-The community tool for town NPC sheets is the *Player Renderer* mod (renders a player into a town NPC
-sheet). The mod has the same thing as playtest commands, Journey mode characters only:
+## Tomes
 
-```
-/atronachtest template  Atronach body template and the same with the crown (20 player frames)
-/atronachtest looks     grid of gauntlet options (hand accessories with dyes)
-/atronachtest hairsm    hair styles on the Conjurer
-/atronachtest hairs   contact sheet of the Atronach with every hair style (to pick one)
-/atronachtest icons   FireAtronachBuff.png (head and shoulders) and atronach_full.png
-/atronachtest npc     Conjurer.png (25 frames) and Conjurer_Head.png
-```
-
-Files land in `Documents/My Games/Terraria/tModLoader/ConjurationExport/`. Copy them into `Content/`,
-rebuild, and run `python tools/check_art.py`. `icon.png` is the full Atronach doubled on a dark ember
-background (any image editor works; a Pillow made `icon_small.png` broke the packer, so the mod has none).
-
-Town NPC sheet layout (Rijam's Town NPC guide): 0 idle, 1 jump, 2-15 walk, 16-17 raised arm, 18 sit,
-19 talk, 20 blink, 21-24 throw. Each frame is a player body/legs frame pair (`NpcFrameMap`).
+The vanilla Spell Tome texture (`Texture` override) with a tint per element; no file in the mod.
 
 ## Pitfalls found on the way (2026-11-10)
 
-- `isDisplayDollOrInanimate` makes the renderer draw mannequin plastic and ignore skin and hair colours.
-- Hair 15 is bald. Use the hairs contact sheet.
-- The sprite batch maps to the back buffer: render on a screen sized target and crop, one frame at a
-  time (a 1450 px sheet does not fit the screen and came out stretched and black).
-- Begin the batch in `Immediate` mode or armor dyes are not applied; the first render after start comes
-  out scaled, so render one throwaway frame first.
-- `DrawPlayerHead` uses the map scale; draw the full player and crop instead.
-- A head piece with `DrawHead = false` also removes the neck: fill it in the head sheet.
-- Light clothing colours come out khaki (the clothes texture multiplies them by grey): use saturated tones.
-- In hjson a value that starts with `{` (like `{NPCName} ...`) must be quoted, or the mod fails to load.
-- Always pull reference images first (2026-11-10: the owner rejected a look invented from memory).
-- Earlier attempts (hand pixel art in code, then ComfyUI with SDXL + Pixel Art XL and Qwen-Image-Edit
-  shrunk to the 2x2 grid) were rejected by the owner: generated art never read as Terraria. Starting from
-  the game's own renderer does.
+- Always start from reference images: two looks invented from memory were rejected.
+- Generated art without a reference and art made of player parts did not read as the Skyrim creatures.
+- In hjson a value that starts with `{` (like `{NPCName} ...`) must be quoted, or the mod fails to load
+  (and tModLoader disables it).
+- The game's sprite batch maps to the back buffer: export one frame at a time on a screen sized target;
+  begin in `Immediate` mode so armor dyes apply; render one throwaway frame first.
+- `isDisplayDollOrInanimate` draws mannequin plastic; `DrawPlayerHead` uses the map scale.
+- A Pillow made `icon_small.png` broke the packer, so the mod has none.

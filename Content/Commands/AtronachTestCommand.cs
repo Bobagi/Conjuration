@@ -11,17 +11,19 @@ using Conjuration.Content.Visuals;
 namespace Conjuration.Content.Commands
 {
 	// Playtest and art helper, only for Journey mode characters in single player:
-	//   /atronachtest            gives the tome
-	//   /atronachtest spawn      also spawns a few zombies to shoot at
-	//   /atronachtest hairs      renders the Atronach with every hair style to a contact sheet
-	//   /atronachtest icons      renders the buff icon (Atronach head) to a PNG
+	//   /atronachtest            gives the three atronach tomes
+	//   /atronachtest spawn      also spawns a few zombies to fight
+	//   /atronachtest unlock     marks Eye of Cthulhu, Skeletron, Hardmode and a mech boss as done (test worlds only!)
+	//   /atronachtest conjurer   spawns the Conjurer next to you (to test the shop)
+	//   /atronachtest hairsm     renders the Conjurer with every hair style (to pick one)
+	//   /atronachtest npc        renders the Conjurer town NPC sheet (25 frames) and head icon
 	// Exports land in <Terraria save folder>/ConjurationExport.
 	public class AtronachTestCommand : ModCommand
 	{
 		public override CommandType Type => CommandType.Chat;
 		public override string Command => "atronachtest";
-		public override string Usage => "/atronachtest [spawn|hairs|hairsm|template|icons|npc|conjurer|unlock]";
-		public override string Description => "Journey mode only: Fire Atronach playtest kit and art exports.";
+		public override string Usage => "/atronachtest [spawn|unlock|conjurer|hairsm|npc]";
+		public override string Description => "Journey mode only: atronach playtest kit and Conjurer art exports.";
 
 		public static string ExportDir => Path.Combine(Main.SavePath, "ConjurationExport");
 
@@ -34,16 +36,14 @@ namespace Conjuration.Content.Commands
 				return;
 			}
 			string sub = args.Length > 0 ? args[0] : "";
-			if (sub == "hairs") { caller.Reply("Wrote " + ExportHairs("hairs.png", () => AtronachLook.Create(withCrown: false)), Color.Orange); return; }
 			if (sub == "hairsm") { caller.Reply("Wrote " + ExportHairs("hairs_conjurer.png", ConjurerLook.Create), Color.Orange); return; }
-			if (sub == "looks") { caller.Reply("Wrote " + ExportLookGrid(), Color.Orange); return; }
-			if (sub == "template") { caller.Reply("Wrote " + ExportAtronachSheets(), Color.Orange); return; }
-			if (sub == "icons") { caller.Reply("Wrote " + ExportBuffIcon(), Color.Orange); return; }
 			if (sub == "npc") { caller.Reply("Wrote " + ExportConjurer(), Color.Orange); return; }
 			if (sub == "unlock")
 			{
-				NPC.downedBoss1 = NPC.downedBoss3 = true;   // test world only: Conjurer moves in and sells the tome
-				caller.Reply("Eye of Cthulhu and Skeletron marked as defeated in this world.", Color.Orange);
+				// test world only: the Conjurer moves in and sells every tome
+				NPC.downedBoss1 = NPC.downedBoss3 = NPC.downedMechBoss1 = NPC.downedMechBossAny = true;
+				Main.hardMode = true;
+				caller.Reply("Eye of Cthulhu, Skeletron, Hardmode and a mechanical boss marked as done in this world.", Color.Orange);
 				return;
 			}
 			if (sub == "conjurer")
@@ -53,13 +53,14 @@ namespace Conjuration.Content.Commands
 				return;
 			}
 
-			p.QuickSpawnItem(p.GetSource_GiftOrReward(), ModContent.ItemType<TomeConjureFireAtronach>());
+			foreach (int tome in new[] { ModContent.ItemType<TomeConjureFireAtronach>(), ModContent.ItemType<TomeConjureFrostAtronach>(), ModContent.ItemType<TomeConjureStormAtronach>() })
+				p.QuickSpawnItem(p.GetSource_GiftOrReward(), tome);
 			if (sub == "spawn")
 			{
-				for (int i = 0; i < 3; i++)
+				for (int i = 0; i < 4; i++)
 					NPC.NewNPC(p.GetSource_FromThis(), (int)p.Center.X + 300 + i * 60, (int)p.Center.Y - 40, NPCID.Zombie);
 			}
-			caller.Reply("Fire Atronach test kit given.", Color.Orange);
+			caller.Reply("Atronach tomes given.", Color.Orange);
 		}
 
 		// Renders with the game's sprite batch into an off screen target. The batch maps to the back buffer,
@@ -201,84 +202,16 @@ namespace Conjuration.Content.Commands
 						d.hair = i;
 						d.direction = 1;
 						d.position = origin + new Vector2((i % cols) * cw + 12, (i / cols - start) * ch + 10);
-						AtronachLook.Refresh(d);
+						d.ResetEffects();
+						d.ResetVisibleAccessories();
+						d.UpdateDyes();
+						d.PlayerFrame();
 						Main.PlayerRenderer.DrawPlayer(Main.Camera, d, d.position, 0f, d.fullRotationOrigin);
 					}
 				});
 				Array.Copy(part, 0, all, start * ch * cols * cw, part.Length);
 			}
 			return SavePng(name, all, cols * cw, rows * ch);
-		}
-
-		// Grid to choose the atronach's gauntlets: columns = hand accessory (+ dye), rows = clothing style.
-		private static string ExportLookGrid()
-		{
-			int[] variants = { 4, 6 };
-			var hands = new (int item, int dye)[]
-			{
-				(0, 0),
-				(ItemID.FireGauntlet, 0),
-				(ItemID.FireGauntlet, ItemID.BlackDye),
-				(ItemID.FeralClaws, 0),
-				(ItemID.FeralClaws, ItemID.BlackDye),
-				(ItemID.MechanicalGlove, ItemID.BlackDye),
-			};
-			const int cw = 44, ch = 60;
-			return RenderToPng("looks.png", hands.Length * cw, variants.Length * ch, origin =>
-			{
-				for (int r = 0; r < variants.Length; r++)
-					for (int c = 0; c < hands.Length; c++)
-					{
-						Player d = AtronachLook.Create(withCrown: false);
-						d.skinVariant = variants[r];
-						if (hands[c].item > 0) d.armor[3].SetDefaults(hands[c].item);
-						if (hands[c].dye > 0) d.dye[3].SetDefaults(hands[c].dye);
-						d.direction = 1;
-						d.position = origin + new Vector2(c * cw + 12, r * ch + 10);
-						AtronachLook.Refresh(d);
-						Main.PlayerRenderer.DrawPlayer(Main.Camera, d, d.position, 0f, d.fullRotationOrigin);
-					}
-			});
-		}
-
-		// Player format sheets (20 frames of 40x56, facing right): body frame i with legs frame i.
-		private static string ExportAtronachSheets()
-		{
-			foreach (bool crown in new[] { false, true })
-			{
-				var sheet = new Color[40 * 56 * 20];
-				RenderToData(40, 56, origin => DrawFrame(AtronachLook.Create(crown), origin, 0, 0));   // warm up
-				for (int i = 0; i < 20; i++)
-				{
-					int f = i;
-					Color[] frame = RenderToData(40, 56, origin =>
-					{
-						Player d = AtronachLook.Create(crown);
-						d.direction = 1;
-						DrawFrame(d, origin, f, f);
-					});
-					Array.Copy(frame, 0, sheet, i * frame.Length, frame.Length);
-				}
-				SavePng(crown ? "atronach_crowned.png" : "atronach_template.png", sheet, 40, 56 * 20);
-			}
-			return Path.Combine(ExportDir, "atronach_template.png");
-		}
-
-		// Head and shoulders for the buff icon, and the whole figure (for icon.png, see tools/icons_from_export.py).
-		// Drawn 1:1 with the normal renderer; DrawPlayerHead applies the map scale and is not used.
-		private static string ExportBuffIcon()
-		{
-			RenderToPng("atronach_full.png", 40, 60, origin => DrawLook(origin + new Vector2(10f, 16f)));
-			return RenderToPng("FireAtronachBuff.png", 32, 32, origin => DrawLook(origin + new Vector2(6f, 13f)));
-		}
-
-		private static void DrawLook(Vector2 hitboxTopLeft)
-		{
-			Player d = AtronachLook.Create();
-			d.direction = 1;
-			d.position = hitboxTopLeft;
-			AtronachLook.Refresh(d);
-			Main.PlayerRenderer.DrawPlayer(Main.Camera, d, d.position, 0f, d.fullRotationOrigin);
 		}
 	}
 }

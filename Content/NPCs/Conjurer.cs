@@ -11,7 +11,8 @@ using Conjuration.Content.Items;
 namespace Conjuration.Content.NPCs
 {
 	// The Conjurer: a town NPC who sells the conjuration tomes. Moves in once the Eye of Cthulhu is
-	// beaten; sells the Fire Atronach tome after Skeletron (it is a Hellstone tier summon).
+	// beaten; sells the Fire Atronach tome after Skeletron, the Frost Atronach in Hardmode and the Storm
+	// Atronach after any mechanical boss.
 	// Sprite sheet and head come from the game's own player renderer (/atronachtest npc), laid out like
 	// vanilla town NPCs (25 frames, see Commands/AtronachTestCommand).
 	[AutoloadHead]
@@ -72,7 +73,7 @@ namespace Conjuration.Content.NPCs
 
 		public override string GetChat()
 		{
-			int n = Main.rand.Next(4);
+			int n = Main.rand.Next(5);
 			if (n == 0 && !NPC.downedBoss3)
 				return Language.GetTextValue("Mods.Conjuration.NPCs.Conjurer.Chat.Locked");
 			return Language.GetTextValue("Mods.Conjuration.NPCs.Conjurer.Chat.Line" + n);
@@ -92,6 +93,8 @@ namespace Conjuration.Content.NPCs
 		{
 			new NPCShop(Type, ShopName)
 				.Add<TomeConjureFireAtronach>(Condition.DownedSkeletron)
+				.Add<TomeConjureFrostAtronach>(Condition.Hardmode)
+				.Add<TomeConjureStormAtronach>(Condition.DownedMechBossAny)
 				.Register();
 		}
 
