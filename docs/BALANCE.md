@@ -10,7 +10,8 @@ summons around Hellstone tier (Imp Staff: 24 damage, 10 mana, hellstone-era).
 | Minion slots | 1 | `Projectile.minionSlots` |
 | Attack | vanilla Imp Fireball (speed 11, pierces, sets On Fire!), one every 68 ticks (Imp's rate) | `AttackCooldown`, `FireballSpeed` |
 | Shoot range | 520 px from the minion; looks for targets 700 px around the owner | `ShootRange`, `DetectRange` |
-| Walk / run speed | 4.5 / 9 (runs when more than 240 px from its spot) | `WalkSpeed`, `RunSpeed` |
+| Walk / run speed | 3.6 / 8 (runs when more than 240 px from its spot) | `WalkSpeed`, `RunSpeed` |
+| Conjurer | moves in after Eye of Cthulhu; sells the tome after Skeletron; 250 life, throws Balls of Fire (20 dmg) | `Content/NPCs/Conjurer.cs` |
 | Reappears next to the owner | over 1000 px away, or stuck 2 s | `TeleportDistance`, `StuckTimer` |
 | Price when sold | 2 gold | `Item.buyPrice` |
 

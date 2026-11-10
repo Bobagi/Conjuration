@@ -1,4 +1,6 @@
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Terraria.GameContent;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
@@ -13,6 +15,18 @@ namespace Conjuration.Content.Items
 	// the minion at the cursor; the buff keeps the minion alive.
 	public class TomeConjureFireAtronach : ModItem
 	{
+		// The vanilla Spell Tome art, warmed up with a fire tint (no copied texture in the mod).
+		public override string Texture => "Terraria/Images/Item_" + ItemID.SpellTome;
+		private static readonly Color FireTint = new Color(255, 170, 110);
+
+		public override bool PreDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
+		{
+			spriteBatch.Draw(TextureAssets.Item[Type].Value, position, frame, drawColor.MultiplyRGBA(FireTint), 0f, origin, scale, SpriteEffects.None, 0f);
+			return false;
+		}
+
+		public override Color? GetAlpha(Color lightColor) => lightColor.MultiplyRGBA(FireTint);
+
 		public override void SetStaticDefaults()
 		{
 			ItemID.Sets.GamepadWholeScreenUseRange[Type] = true;

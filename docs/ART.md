@@ -1,59 +1,54 @@
 # Art guide
 
-All mod art comes from the local **ComfyUI** (generation) plus three small scripts (turning it into
-Terraria sprites). Nothing is copied from Skyrim: the look (a slender woman of living fire with flame
-hair, floating embers) is described in words in the prompt, never fed as an image.
+All characters are drawn with **Terraria's own player renderer**, the trick the vanilla Mannequin uses:
+a dummy `Player` dressed with vanilla items and colours. That gives the real proportions, outline,
+palette, walk cycle and arm poses of the game, and the mod ships no copied art.
 
-| File | Size | What |
+| What | How it is drawn | Files |
 |---|---|---|
-| `Content/Projectiles/FireAtronachMinion.png` | **52x448** | 7 frames of 52x64 stacked, frame 0 on top, facing **left** |
-| `Content/Buffs/FireAtronachBuff.png` | 32x32 | head and flame crown |
-| `Content/Items/TomeConjureFireAtronach.png` | 32x32 | the spell tome |
-| `icon.png` / `icon_small.png` | 80x80 / 30x30 | mod list icons |
+| Fire Atronach (minion) | live, every frame, `Content/Visuals/AtronachLook.cs` | `FireAtronachMinion.png` is a transparent 20x42 stand in |
+| Conjurer (town NPC) | sheet exported from `Content/Visuals/ConjurerLook.cs` | `Content/NPCs/Conjurer.png` (40x1450) and `Conjurer_Head.png` |
+| Buff icon, mod icon | exported head / full figure of the Atronach | `Content/Buffs/FireAtronachBuff.png`, `icon.png` (80x80) |
+| Tome | the vanilla Spell Tome texture with a fire tint (`Texture` override) | none |
 
-Sheet frames: `0 idle | 1 walk A | 2 pass | 3 walk B | 4 pass | 5 wind up | 6 throw`. The AI in
-`Content/Projectiles/FireAtronachMinion.cs` picks them (`FrameIdle`, `FrameWalk`, `FrameWindup`,
-`FrameThrow`) and mirrors the sprite when it faces right. Run `python tools/check_art.py` after any change.
+## The looks
 
-## Terraria style rules (why the scripts do what they do)
+- **Fire Atronach**: female, fire orange skin and clothes, spiky hair 23 in flame yellow, **Molten
+  Breastplate** dyed with **Flame and Black Dye** (black plates with moving flames, like the atronach
+  of the games that inspired the mod). Fire dust rises from the hair, it lights its surroundings, and it
+  raises then stretches the arm toward the target when it throws (composite arm).
+- **Conjurer**: old white haired man with ember eyes, **Wizard Hat** dyed Flame and Black, **Ruby Robe**.
+  Deliberately not purple, so he does not look like the vanilla Wizard.
 
-- Vanilla sprites use **2x2 screen pixels per art pixel** (the Fire Imp is 19x22 art pixels in a 38x44
-  image). Everything is reduced to the art grid and enlarged 2x with nearest neighbour.
-- Dark 1 art pixel outline, flat shading, short palette: basalt `#2a120a #3b2418 #5e3a24 #7d4d2e`,
-  fire `#a8240c #e24010 #ff6e18 #ffa024 #ffd24a #fff1a8`, metal greys for armor.
-- The minion is about player height (31 art pixels, 62 on screen) and stands on the ground.
+Change a look by editing those two files; nothing else needs redrawing for the Atronach.
 
-## Pipeline
+## Exporting sheets and icons (the "Player Renderer" helper, built in)
 
-ComfyUI must be running on `127.0.0.1:8188` (see `C:\ComfyUIFiles\CLAUDE.md`). Models used:
-`sd_xl_base_1.0` + LoRA **Pixel Art XL** (`loras/pixel-art-xl.safetensors`, nerijs, OpenRAIL-M, weight 1.2)
-for concepts, and **Qwen-Image-Edit 2511** (`C:\ComfyUIFiles\scripts\qwen_edit.py`) for new poses of the
-same character.
+The community tool for town NPC sheets is the *Player Renderer* mod (renders a player into a town NPC
+sheet). The mod has the same thing as playtest commands, Journey mode characters only:
 
-1. **Concept** (about 25 s each on the 3060 Ti):
-   `python tools/comfy_atronach.py --count 6 --name v1` and pick the best in
-   `C:\ComfyUIFiles\output\conjuration\`.
-2. **Idle pose from the concept**, then the other poses **from the idle** (about 2.5 min each), always
-   starting the prompt with "Same fire creature, same pixel art style, same colors and proportions,
-   full body side view facing right, plain white background, nothing else. Change only the pose:".
-   Output names must be `atr_idle_*`, `atr_walkA_*`, `atr_walkB_*`, `atr_windup_*`, `atr_throw_*`:
-   ```
-   python C:\ComfyUIFiles\scripts\qwen_edit.py --image <concept.png> --name atr_idle --prompt "..."
-   python C:\ComfyUIFiles\scripts\qwen_edit.py --image <atr_idle.png> --name atr_walkA --prompt "... left leg forward ..."
-   ```
-3. **Tome**: `python tools/comfy_atronach.py --tome --count 4 --name tome` (dark covers survive the
-   background cut better than white ones).
-4. **Build everything** with the rembg venv:
-   `C:\ComfyUIFiles\tools\.venv\Scripts\python.exe tools/build_sheet.py [--preview out.png]`.
-   It cuts the background (rembg isnet), scales every pose by the **same** factor (taken from idle),
-   keeps thin flames (a block with 15% fire is kept and coloured by its fire pixels), maps colours to the
-   palette (`tools/sprite_from_concept.py`), outlines, aligns feet and torso, adds flickering flame
-   tongues to the hair and writes all the files above.
+```
+/atronachtest hairs   contact sheet of the Atronach with every hair style (to pick one)
+/atronachtest icons   FireAtronachBuff.png (head and shoulders) and atronach_full.png
+/atronachtest npc     Conjurer.png (25 frames) and Conjurer_Head.png
+```
 
-## Lessons (2026-11-10)
+Files land in `Documents/My Games/Terraria/tModLoader/ConjurationExport/`. Copy them into `Content/`,
+rebuild, and run `python tools/check_art.py`. `icon.png` is the full Atronach doubled on a dark ember
+background (any image editor works; a Pillow made `icon_small.png` broke the packer, so the mod has none).
 
-- No free asset fit: the CC0 fire creatures on OpenGameArt had no outline or a cute style.
-- A plain average when shrinking makes fire dull and erases the flame hair; the fire aware reduction
-  and the per frame flame tongues fix it.
-- Count orange rock as basalt and only bright warm pixels as fire, or the whole body turns flat orange.
-- Qwen-Image-Edit keeps the character very consistent between poses; SDXL img2img does not.
+Town NPC sheet layout (Rijam's Town NPC guide): 0 idle, 1 jump, 2-15 walk, 16-17 raised arm, 18 sit,
+19 talk, 20 blink, 21-24 throw. Each frame is a player body/legs frame pair (`NpcFrameMap`).
+
+## Pitfalls found on the way (2026-11-10)
+
+- `isDisplayDollOrInanimate` makes the renderer draw mannequin plastic and ignore skin and hair colours.
+- Hair 15 is bald. Use the hairs contact sheet.
+- The sprite batch maps to the back buffer: render on a screen sized target and crop, one frame at a
+  time (a 1450 px sheet does not fit the screen and came out stretched and black).
+- Begin the batch in `Immediate` mode or armor dyes are not applied; the first render after start comes
+  out scaled, so render one throwaway frame first.
+- `DrawPlayerHead` uses the map scale; draw the full player and crop instead.
+- Earlier attempts (hand pixel art in code, then ComfyUI with SDXL + Pixel Art XL and Qwen-Image-Edit
+  shrunk to the 2x2 grid) were rejected by the owner: generated art never read as Terraria. Starting from
+  the game's own renderer does.

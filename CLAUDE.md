@@ -7,8 +7,9 @@ Summon-class mod, Fire Atronach first. Read `README.md` (roadmap, how to open) a
   Tune numbers with `docs/BALANCE.md`.
 - Localization: the file name `en-US_Mods.Conjuration.hjson` already sets the `Mods.Conjuration` prefix;
   keys inside start at `Items:`/`Buffs:` (repeating `Mods: { Conjuration:` broke every name once).
-- Art: generated with the local ComfyUI and built by `tools/build_sheet.py`, full pipeline in `docs/ART.md`.
-  Verify sizes with `python tools/check_art.py`. Sprites use 2x2 screen pixels per art pixel like vanilla.
+- Art: characters are dummy Players drawn with the game's renderer (`Content/Visuals/`); sheets and icons
+  are exported in game with `/atronachtest npc|icons`, see `docs/ART.md`. Do not go back to AI generated
+  sprites: the owner rejected them (2026-11-10). Verify sizes with `python tools/check_art.py`.
 - Playtest: Journey character + `/atronachtest [spawn]`; launch with `-skipselect "player:world"`.
 - tModLoader targets .NET 8; the mod uses 1.4.4 APIs (`ModProjectile`, `ModBuff`, `ModItem`).
 - Do not copy Skyrim assets or text. Original designs only.

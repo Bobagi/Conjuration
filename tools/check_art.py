@@ -6,13 +6,14 @@ import struct, sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-# path -> (width, height) ; keep in sync with docs/ART.md and FrameCount in the minion.
+# path -> (width, height) ; keep in sync with docs/ART.md.
 EXPECTED = {
-    "Content/Items/TomeConjureFireAtronach.png": (32, 32),
+    # The Atronach is drawn with the game's player renderer; its texture is only a transparent stand in.
+    "Content/Projectiles/FireAtronachMinion.png": (20, 42),
     "Content/Buffs/FireAtronachBuff.png": (32, 32),
-    "Content/Projectiles/FireAtronachMinion.png": (52, 448),   # 7 frames of 52x64, stacked
+    # Town NPC sheet: 25 frames of 40x58, exported in game with /atronachtest npc.
+    "Content/NPCs/Conjurer.png": (40, 1450),
     "icon.png": (80, 80),
-    "icon_small.png": (30, 30),
 }
 
 

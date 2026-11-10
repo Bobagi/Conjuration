@@ -1,1 +1,1 @@
-0.1: Tome of the Fire Atronach and its minion. The atronach walks on the ground beside you (walk, wind up and throw animation) and hurls Imp style fireballs.
+0.1: Tome of the Fire Atronach and its minion: a woman of living fire that walks beside you and hurls Imp style fireballs. The Conjurer town NPC sells the tome after Skeletron. Both drawn with Terraria's own character renderer.

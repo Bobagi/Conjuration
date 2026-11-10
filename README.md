@@ -5,13 +5,17 @@ art are our own, nothing is copied from Bethesda).
 
 **v0.1:** *Tome: Conjure Fire Atronach*. A permanent minion (1 slot) that **walks on the ground** beside you, like the
 atronachs of the games that inspired it, and stops to hurl fireballs (the vanilla Imp Fireball, at the
-Imp's rate). If it falls far behind it reappears next to you in a burst of fire. Art generated with the
-local ComfyUI and turned into Terraria style sprites, see `docs/ART.md`.
+Imp's rate). If it falls far behind it reappears next to you in a burst of fire.
+
+**The Conjurer**, a town NPC, moves in after the Eye of Cthulhu and sells the tome after Skeletron.
+
+Both are drawn with Terraria's own player renderer (a dressed up dummy player, like the Mannequin),
+so they look like the game itself; see `docs/ART.md`.
 
 ## Roadmap
 
-1. Fire Atronach minion and tome (this repo, v0.1, needs art + playtest).
-2. A **wizard town NPC** that sells the conjuration tomes (shop with progression conditions).
+1. Fire Atronach minion and tome (done, playtested in single player).
+2. The **Conjurer** town NPC that sells the conjuration tomes (done: shop gated by Skeletron).
 3. More conjurations: Frost Atronach, Storm Atronach, Dremora.
 4. Not planned: the wizard school / portal dimension (needs a custom map and a world-switch system).
 
@@ -47,7 +51,8 @@ Builds with 0 errors and 0 warnings on tModLoader v2026.9.3.1. Playtested in sin
 (17 damage per hit on a Zombie). Multiplayer not tested yet, see `docs/BALANCE.md`.
 
 Playtest shortcut: a **Journey mode** character in single player can type `/atronachtest` in chat to get
-the tome, or `/atronachtest spawn` to also spawn three zombies.
+the tome, `/atronachtest spawn` to also spawn three zombies, `/atronachtest unlock` (test worlds only:
+marks Eye of Cthulhu and Skeletron as beaten) and `/atronachtest conjurer` to meet the NPC.
 
 ## Layout
 
@@ -57,12 +62,11 @@ Content/Items/                        the tome (summon item)
 Content/Buffs/                        the buff that keeps the minion alive
 Content/Projectiles/                  the minion (AI, fireballs, animation)
 Localization/en-US_Mods.Conjuration.hjson   names and tooltips
-Content/Commands/                     /atronachtest playtest helper (Journey mode only)
-tools/comfy_atronach.py               ComfyUI concepts (creature and tome)
-tools/build_sheet.py                  poses -> sprite sheet, buff, tome, icons
-tools/sprite_from_concept.py          background cut, palette and outline helpers
+Content/NPCs/                         the Conjurer town NPC (shop, chat, sheet and head)
+Content/Visuals/                      looks of the Atronach and the Conjurer (dummy players)
+Content/Commands/                     /atronachtest playtest and sprite export helper (Journey only)
 tools/check_art.py                    verifies sprite sizes before building
-docs/ART.md                           sprite specs + ComfyUI workflow
+docs/ART.md                           how the art is made and exported
 docs/BALANCE.md                       numbers and the test checklist
 ```
 

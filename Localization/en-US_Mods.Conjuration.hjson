@@ -14,3 +14,36 @@ Buffs: {
 }
 
 Projectiles.FireAtronachMinion.DisplayName: Fire Atronach
+
+NPCs: {
+	Conjurer: {
+		DisplayName: Conjurer
+		Bestiary: A scholar of conjuration who binds spirits of fire, frost and storm. He will teach any summoner who proves themselves against Skeletron.
+
+		Chat: {
+			Locked: The old skeleton in the dungeon still stands. Come back when it falls, and I will share my tomes.
+			Line0: A Fire Atronach is not a pet. Treat it with respect and it will burn your enemies for you.
+			Line1: Conjuration is simple: a strong will, a clear circle, and a lot of patience.
+			Line2: Mind the curtains. Nothing in my house is fireproof any more.
+			Line3: The Wizard calls it showing off. I call it bringing a friend.
+		}
+
+		TownNPCMood: {
+			Content: My circles are drawn, my candles are lit. I am content.
+			NoHome: A conjurer without a study is just a man talking to fire. Find me a house.
+			FarFromHome: My notes are all the way back home. This is no place to work.
+			LoveSpace: So much room! I could summon something truly large in here.
+			DislikeCrowded: Too many people. One sneeze and the circle breaks.
+			HateCrowded: I cannot concentrate with this crowd. Something will catch fire.
+			LikeBiome: The {BiomeName} is quiet. Good for long hours of study.
+			DislikeBiome: The {BiomeName} is far too damp for fire magic.
+			LoveNPC: {NPCName} understands real magic. We talk for hours.
+			LikeNPC: {NPCName} always has something that goes boom. I respect that.
+			DislikeNPC: {NPCName} keeps throwing water at my experiments.
+			LikeNPC_Princess: {NPCName} is lovely. My atronachs behave around her.
+			Princess_LovesNPC: {NPCName} lets me watch the little fire spirits dance!
+		}
+
+		Census.SpawnCondition: Defeat the Eye of Cthulhu
+	}
+}
