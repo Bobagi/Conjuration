@@ -1,0 +1,18 @@
+{
+ "flame": {
+  "idle": "C:\\ComfyUIFiles\\output\\qwen\\flame_idle_652b75_00001_.png",
+  "walkA": "C:\\ComfyUIFiles\\output\\qwen\\flame_walkA_a2d683_00001_.png",
+  "walkB": "C:\\ComfyUIFiles\\output\\qwen\\flame_walkB_745597_00001_.png",
+  "cast": "C:\\ComfyUIFiles\\output\\qwen\\flame_cast_c6c67a_00001_.png"
+ },
+ "frost": {
+  "idle": "C:\\ComfyUIFiles\\output\\qwen\\frost_idle2_ab13da_00001_.png",
+  "walkA": "C:\\ComfyUIFiles\\output\\qwen\\frost_walkA_2172fb_00001_.png",
+  "walkB": "C:\\ComfyUIFiles\\output\\qwen\\frost_walkB_18ef20_00001_.png",
+  "punch": "C:\\ComfyUIFiles\\output\\qwen\\frost_punch_e77846_00001_.png"
+ },
+ "storm": {
+  "idle": "C:\\ComfyUIFiles\\output\\qwen\\storm_idle_5e0b8a_00001_.png",
+  "cast": "C:\\ComfyUIFiles\\output\\qwen\\storm_cast2_638c8a_00001_.png|flip"
+ }
+}

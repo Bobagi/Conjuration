@@ -12,8 +12,8 @@ namespace Conjuration.Content.Projectiles
 	public class FireAtronachMinion : AtronachMinion
 	{
 		protected override int BuffType => ModContent.BuffType<FireAtronachBuff>();
-		protected override int HitboxWidth => 20;
-		protected override int HitboxHeight => 44;
+		protected override int HitboxWidth => 22;
+		protected override int HitboxHeight => 58;
 
 		protected override void Attack(NPC target)
 		{

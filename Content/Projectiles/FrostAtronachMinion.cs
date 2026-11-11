@@ -13,8 +13,8 @@ namespace Conjuration.Content.Projectiles
 	public class FrostAtronachMinion : AtronachMinion
 	{
 		protected override int BuffType => ModContent.BuffType<FrostAtronachBuff>();
-		protected override int HitboxWidth => 36;
-		protected override int HitboxHeight => 70;
+		protected override int HitboxWidth => 40;
+		protected override int HitboxHeight => 84;
 		protected override float WalkSpeed => 2.6f;
 		protected override float RunSpeed => 6.5f;
 		protected override float AttackRange => 64f;

@@ -11,6 +11,7 @@ Sheet layout (facing right): 0 idle | 1 walk A | 2 pass | 3 walk B | 4 pass | 5 
 Run with the ComfyUI tools venv (rembg, numpy, Pillow):
   C:\\ComfyUIFiles\\tools\\.venv\\Scripts\\python.exe tools/atronach_art.py poses.json [--preview out.png]
 poses.json: {"flame": {"idle": path, "walkA": path, "walkB": path, "cast": path}, "frost": {...}, ...}
+(append "|flip" to a path if that pose faces left)
 """
 import json
 import sys
@@ -24,15 +25,19 @@ PATCH = 8   # working pixels per art pixel
 
 # art height of the idle figure (art pixels, outline excluded), palette size, attack pose name, minion file
 CREATURES = {
-    "flame": dict(height=44, colors=16, attack="cast", out="FireAtronach", glow=(255, 226, 120)),
+    "flame": dict(height=35, colors=16, attack="cast", out="FireAtronach", glow=(255, 226, 120)),
     "frost": dict(height=52, colors=12, attack="punch", out="FrostAtronach", glow=(214, 246, 255)),
     "storm": dict(height=48, colors=14, attack="cast", out="StormAtronach", glow=(206, 190, 255)),
 }
 
 
 def cut(path):
+    """path may end with '|flip' when the generator drew the pose facing left."""
     from rembg import new_session, remove
-    img = Image.open(path).convert("RGB")
+    flip = path.endswith("|flip")
+    img = Image.open(path.split("|")[0]).convert("RGB")
+    if flip:
+        img = img.transpose(Image.FLIP_LEFT_RIGHT)
     out = remove(img, session=new_session("isnet-general-use"))
     a = out.getchannel("A").point(lambda v: 255 if v > 100 else 0)
     out.putalpha(a)

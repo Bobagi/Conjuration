@@ -8,10 +8,13 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 # path -> (width, height) ; keep in sync with docs/ART.md.
 EXPECTED = {
-    # The Atronach is drawn with the game's player renderer; its texture is only a transparent stand in.
-    "Content/Projectiles/FireAtronachMinion.png": (20, 42),
+    "Content/Projectiles/FireAtronachMinion.png": (64, 480),   # 6 frames, tools/atronach_art.py
     "Content/Buffs/FireAtronachBuff.png": (32, 32),
-    # Town NPC sheet: 25 frames of 40x58, exported in game with /atronachtest npc.
+    "Content/Projectiles/FrostAtronachMinion.png": (100, 684),   # 6 frames, tools/atronach_art.py
+    "Content/Buffs/FrostAtronachBuff.png": (32, 32),
+    "Content/Projectiles/StormAtronachMinion.png": (104, 636),   # 6 frames, tools/atronach_art.py
+    "Content/Buffs/StormAtronachBuff.png": (32, 32),
+    "Content/Projectiles/Blank.png": (2, 2),
     "Content/NPCs/Conjurer.png": (40, 1450),
     "icon.png": (80, 80),
 }
