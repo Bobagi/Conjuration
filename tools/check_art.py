@@ -15,6 +15,9 @@ EXPECTED = {
     "Content/Projectiles/StormAtronachMinion.png": (104, 636),   # 6 frames, tools/atronach_art.py
     "Content/Buffs/StormAtronachBuff.png": (32, 32),
     "Content/Projectiles/Blank.png": (2, 2),
+    "Content/Items/TomeConjureFireAtronach.png": (30, 34),
+    "Content/Items/TomeConjureFrostAtronach.png": (30, 34),
+    "Content/Items/TomeConjureStormAtronach.png": (30, 34),
     "Content/NPCs/Conjurer.png": (40, 1450),
     "icon.png": (80, 80),
 }

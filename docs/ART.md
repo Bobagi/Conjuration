@@ -46,7 +46,14 @@ ConjurationExport/`; copy `Conjurer.png` and `Conjurer_Head.png` into `Content/N
 
 ## Tomes
 
-The vanilla Spell Tome texture (`Texture` override) with a tint per element; no file in the mod.
+Skyrim's Conjuration spell tome (UESP icon `SR-icon-book-SpellTomeConjuration`): purple leather, a
+border of silver rings, the Conjuration sign. Drawn by `tools/make_tomes.py`; a gem on the spine tells
+the three apart (fire red, frost cyan, storm violet).
+
+## Hand editing
+
+`art/` holds every sprite at 1x art pixels, one file per frame; edit there and run
+`python tools/art_folder.py pack` (see `art/README.md`).
 
 ## Pitfalls found on the way (2026-11-10)
 

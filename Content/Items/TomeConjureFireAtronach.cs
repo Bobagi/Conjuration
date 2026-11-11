@@ -11,22 +11,12 @@ using Conjuration.Content.Projectiles;
 namespace Conjuration.Content.Items
 {
 	// Summon tome (standard tModLoader minion item pattern): using it adds the buff and spawns the
-	// minion at the cursor; the buff keeps the minion alive. The art is the vanilla Spell Tome with a
-	// tint per element (no copied texture). Sold by the Conjurer, see NPCs/Conjurer.
+	// minion at the cursor; the buff keeps the minion alive. The art (tools/make_tomes.py, art/tomes) is
+	// Skyrim's purple Conjuration tome with an element gem on the spine. Sold by the Conjurer.
 	public abstract class AtronachTome : ModItem
 	{
-		public override string Texture => "Terraria/Images/Item_" + ItemID.SpellTome;
-		protected abstract Color Tint { get; }
 		protected abstract int BuffType { get; }
 		protected abstract int MinionType { get; }
-
-		public override bool PreDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
-		{
-			spriteBatch.Draw(TextureAssets.Item[Type].Value, position, frame, drawColor.MultiplyRGBA(Tint), 0f, origin, scale, SpriteEffects.None, 0f);
-			return false;
-		}
-
-		public override Color? GetAlpha(Color lightColor) => lightColor.MultiplyRGBA(Tint);
 
 		public override void SetStaticDefaults()
 		{
@@ -36,8 +26,8 @@ namespace Conjuration.Content.Items
 
 		public override void SetDefaults()
 		{
-			Item.width = 28;
-			Item.height = 30;
+			Item.width = 30;
+			Item.height = 34;
 			Item.useTime = 36;
 			Item.useAnimation = 36;
 			Item.useStyle = ItemUseStyleID.Swing;
@@ -65,7 +55,6 @@ namespace Conjuration.Content.Items
 	// Pre-Hardmode, Hellstone tier (sold after Skeletron; also craftable).
 	public class TomeConjureFireAtronach : AtronachTome
 	{
-		protected override Color Tint => new Color(255, 170, 110);
 		protected override int BuffType => ModContent.BuffType<FireAtronachBuff>();
 		protected override int MinionType => ModContent.ProjectileType<FireAtronachMinion>();
 
@@ -93,7 +82,6 @@ namespace Conjuration.Content.Items
 	// Early Hardmode melee tank (sold once Hardmode starts).
 	public class TomeConjureFrostAtronach : AtronachTome
 	{
-		protected override Color Tint => new Color(150, 210, 255);
 		protected override int BuffType => ModContent.BuffType<FrostAtronachBuff>();
 		protected override int MinionType => ModContent.ProjectileType<FrostAtronachMinion>();
 
@@ -111,7 +99,6 @@ namespace Conjuration.Content.Items
 	// Mid Hardmode chain lightning (sold after any mechanical boss).
 	public class TomeConjureStormAtronach : AtronachTome
 	{
-		protected override Color Tint => new Color(190, 160, 255);
 		protected override int BuffType => ModContent.BuffType<StormAtronachBuff>();
 		protected override int MinionType => ModContent.ProjectileType<StormAtronachMinion>();
 
