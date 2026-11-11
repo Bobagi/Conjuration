@@ -11,10 +11,9 @@ using Conjuration.Content.Visuals;
 namespace Conjuration.Content.Commands
 {
 	// Playtest and art helper, only for Journey mode characters in single player:
-	//   /atronachtest            gives the three atronach tomes
+	//   /atronachtest            puts the three atronach tomes in hotbar slots 7, 8 and 9
 	//   /atronachtest spawn      also spawns a few zombies to fight
 	//   /atronachtest unlock     marks Eye of Cthulhu, Skeletron, Hardmode and a mech boss as done (test worlds only!)
-	//   /atronachtest summon     summons all three atronachs at once
 	//   /atronachtest conjurer   spawns the Conjurer next to you (to test the shop)
 	//   /atronachtest hairsm     renders the Conjurer with every hair style (to pick one)
 	//   /atronachtest npc        renders the Conjurer town NPC sheet (25 frames) and head icon
@@ -23,7 +22,7 @@ namespace Conjuration.Content.Commands
 	{
 		public override CommandType Type => CommandType.Chat;
 		public override string Command => "atronachtest";
-		public override string Usage => "/atronachtest [spawn|summon|unlock|conjurer|hairsm|npc]";
+		public override string Usage => "/atronachtest [spawn|unlock|conjurer|hairsm|npc]";
 		public override string Description => "Journey mode only: atronach playtest kit and Conjurer art exports.";
 
 		public static string ExportDir => Path.Combine(Main.SavePath, "ConjurationExport");
@@ -47,20 +46,6 @@ namespace Conjuration.Content.Commands
 				caller.Reply("Eye of Cthulhu, Skeletron, Hardmode and a mechanical boss marked as done in this world.", Color.Orange);
 				return;
 			}
-			if (sub == "summon")
-			{
-				// all three atronachs at once, as if each tome had been used (damage = the tome's damage)
-				foreach (var t in new[] { ModContent.ItemType<TomeConjureFireAtronach>(), ModContent.ItemType<TomeConjureFrostAtronach>(), ModContent.ItemType<TomeConjureStormAtronach>() })
-				{
-					Item tome = new Item(t);
-					p.AddBuff(tome.buffType, 2);
-					Projectile pr = Projectile.NewProjectileDirect(p.GetSource_ItemUse(tome), p.Center - new Vector2(p.direction * 60f, 20f), Vector2.Zero, tome.shoot,
-						p.GetWeaponDamage(tome), tome.knockBack, p.whoAmI);
-					pr.originalDamage = tome.damage;
-				}
-				caller.Reply("Fire, Frost and Storm Atronachs summoned.", Color.Orange);
-				return;
-			}
 			if (sub == "conjurer")
 			{
 				NPC.NewNPC(p.GetSource_FromThis(), (int)p.Center.X + 60, (int)p.Bottom.Y, ModContent.NPCType<NPCs.Conjurer>());
@@ -68,8 +53,10 @@ namespace Conjuration.Content.Commands
 				return;
 			}
 
-			foreach (int tome in new[] { ModContent.ItemType<TomeConjureFireAtronach>(), ModContent.ItemType<TomeConjureFrostAtronach>(), ModContent.ItemType<TomeConjureStormAtronach>() })
-				p.QuickSpawnItem(p.GetSource_GiftOrReward(), tome);
+			// straight into hotbar slots 7, 8 and 9 (replacing what was there: test characters only)
+			int[] tomes = { ModContent.ItemType<TomeConjureFireAtronach>(), ModContent.ItemType<TomeConjureFrostAtronach>(), ModContent.ItemType<TomeConjureStormAtronach>() };
+			for (int i = 0; i < tomes.Length; i++)
+				p.inventory[6 + i].SetDefaults(tomes[i]);
 			if (sub == "spawn")
 			{
 				for (int i = 0; i < 4; i++)
