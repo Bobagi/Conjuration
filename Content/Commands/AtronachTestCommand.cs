@@ -6,11 +6,13 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Conjuration.Content.Items;
+using Conjuration.Content;
 using Conjuration.Content.Visuals;
 
 namespace Conjuration.Content.Commands
 {
-	// Playtest and art helper, only for Journey mode characters in single player:
+	// Playtest and art helper, single player only, for Journey mode characters (any character when the
+	// AllowTestCommandForAnyCharacter config option is on):
 	//   /atronachtest            puts the three atronach tomes in hotbar slots 7, 8 and 9
 	//   /atronachtest spawn      also spawns a few zombies to fight
 	//   /atronachtest unlock     marks Eye of Cthulhu, Skeletron, Hardmode and a mech boss as done (test worlds only!)
@@ -23,16 +25,17 @@ namespace Conjuration.Content.Commands
 		public override CommandType Type => CommandType.Chat;
 		public override string Command => "atronachtest";
 		public override string Usage => "/atronachtest [spawn|unlock|conjurer|hairsm|npc]";
-		public override string Description => "Journey mode only: atronach playtest kit and Conjurer art exports.";
+		public override string Description => "Atronach playtest kit and Conjurer art exports (see the mod config to use it outside Journey mode).";
 
 		public static string ExportDir => Path.Combine(Main.SavePath, "ConjurationExport");
 
 		public override void Action(CommandCaller caller, string input, string[] args)
 		{
 			Player p = caller.Player;
-			if (Main.netMode != NetmodeID.SinglePlayer || p.difficulty != PlayerDifficultyID.Creative)
+			bool allowed = p.difficulty == PlayerDifficultyID.Creative || ModContent.GetInstance<ConjurationConfig>().AllowTestCommandForAnyCharacter;
+			if (Main.netMode != NetmodeID.SinglePlayer || !allowed)
 			{
-				caller.Reply("Only for Journey mode characters in single player.", Color.OrangeRed);
+				caller.Reply("Single player only, for Journey characters (or turn on \"Allow test command for any character\" in Settings > Mod Configuration > Conjuration).", Color.OrangeRed);
 				return;
 			}
 			string sub = args.Length > 0 ? args[0] : "";

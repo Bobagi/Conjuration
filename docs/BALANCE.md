@@ -29,6 +29,7 @@ reappears beside you instead.
 | Sold | Hardmode | after any mechanical boss | `Conjurer.AddShops` |
 | Attack | 56 px punch hitbox in front, hits every enemy in it once, Frostbite 3 s, knockback 8 | bolt speed 18, jumps once to the nearest enemy within 320 px, Electrified 2 s | `AtronachSlam`, `StormBolt` |
 | Range / cooldown | 64 px / 40 ticks | 560 px / 54 ticks | `AttackRange`, `AttackCooldown` |
+| Open sky bonus | none | each enemy hit by the bolt under the open sky (surface layer, nothing solid in the 30 tiles above) gets a lightning strike for 80% of the bolt's damage, 120% while it rains, Electrified 3 s | `StormStrike` |
 | Walk / run | 2.6 / 6.5 | 3.6 / 8 (hovers 10 px) | subclasses of `AtronachMinion` |
 
 The Frost Atronach is the tank: slow, short range, hard hitting, many targets at once. The Storm Atronach

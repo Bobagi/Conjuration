@@ -20,6 +20,7 @@ Items: {
 			'''
 			Summons a Storm Atronach that hovers beside you and casts Chain Lightning
 			The lightning jumps to a second enemy
+			Under the open sky, lightning also strikes the enemies it hits, harder in the rain
 			'''
 	}
 }
@@ -47,6 +48,7 @@ Projectiles: {
 	StormAtronachMinion.DisplayName: Storm Atronach
 	AtronachSlam.DisplayName: Frost Atronach
 	StormBolt.DisplayName: Chain Lightning
+	StormStrike.DisplayName: Lightning Strike
 }
 
 NPCs: {
@@ -80,5 +82,21 @@ NPCs: {
 		}
 
 		Census.SpawnCondition: Defeat the Eye of Cthulhu
+	}
+}
+
+Configs: {
+	ConjurationConfig: {
+		DisplayName: Conjuration
+
+		AllowTestCommandForAnyCharacter: {
+			Label: Allow test command for any character
+			Tooltip:
+				'''
+				Lets /atronachtest work for every character in single player, not only Journey mode ones.
+				/atronachtest puts the three atronach tomes in hotbar slots 7, 8 and 9.
+				/atronachtest unlock marks bosses and Hardmode as done in the world: only for test worlds!
+				'''
+		}
 	}
 }

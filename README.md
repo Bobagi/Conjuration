@@ -10,7 +10,7 @@ atronachs of Skyrim (it reappears next to you in a burst of its element if it fa
 |---|---|---|---|
 | Conjure Fire Atronach | walks, human sized | throws fireballs (vanilla Imp Fireball) | after Skeletron (also craftable) |
 | Conjure Frost Atronach | huge and slow, never hovers | walks into melee and punches, Frostbite, heavy knockback | Hardmode |
-| Conjure Storm Atronach | floats just above the ground | Chain Lightning that jumps to a second enemy | after any mechanical boss |
+| Conjure Storm Atronach | floats just above the ground | Chain Lightning that jumps to a second enemy; under the open sky a lightning strike falls on every enemy it hits (stronger in rain) | after any mechanical boss |
 
 **The Conjurer**, a town NPC modelled on Skyrim's conjuration master Phinis Gestor, moves in after the
 Eye of Cthulhu. Art pipeline (Skyrim references, local ComfyUI, pixelizer): `docs/ART.md`.
@@ -44,8 +44,10 @@ cd "<Steam>/steamapps/common/tModLoader"
 ./dotnet/dotnet tModLoader.dll -build "<ModSources>/Conjuration"
 ```
 
-To get the tome fast: `/atronachtest` (Journey characters), or craft it:
-Book + 12 Hellstone Bar + 3 Fireblossom at a Bookcase.
+Getting the tomes: craft the Fire one (Book + 12 Hellstone Bar + 3 Fireblossom at a Bookcase) or buy
+them from the Conjurer. For testing, `/atronachtest` puts all three in hotbar slots 7 to 9: it works for
+Journey characters, and for any character in single player once "Allow test command for any character"
+is on in Settings > Mod Configuration > Conjuration.
 
 ## Status
 

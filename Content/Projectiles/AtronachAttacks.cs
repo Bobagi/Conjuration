@@ -38,7 +38,8 @@ namespace Conjuration.Content.Projectiles
 	}
 
 	// Chain Lightning: a fast bolt drawn with electric dust. On its first hit it jumps once to the nearest
-	// other enemy (ai[0] = jumps left) with 75% damage.
+	// other enemy (ai[0] = jumps left) with 75% damage. Every enemy it hits under the open sky also gets a
+	// StormStrike from the sky.
 	public class StormBolt : ModProjectile
 	{
 		public const float Speed = 18f;
@@ -69,7 +70,15 @@ namespace Conjuration.Content.Projectiles
 		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 		{
 			target.AddBuff(BuffID.Electrified, 120);
-			if (Projectile.ai[0] < 1f || Main.myPlayer != Projectile.owner) return;
+			if (Main.myPlayer != Projectile.owner) return;
+			// Under the open sky the storm answers: a lightning strike falls on the enemy (stronger in rain).
+			if (StormStrike.OpenSky(target))
+			{
+				float mult = Main.raining ? 1.2f : 0.8f;
+				Projectile.NewProjectile(Projectile.GetSource_FromThis(), target.Center, Vector2.Zero, ModContent.ProjectileType<StormStrike>(),
+					(int)(Projectile.damage * mult), Projectile.knockBack, Projectile.owner);
+			}
+			if (Projectile.ai[0] < 1f) return;
 			NPC next = null;
 			float best = 320f;
 			foreach (NPC npc in Main.ActiveNPCs)
